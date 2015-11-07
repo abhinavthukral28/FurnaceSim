@@ -1,55 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home Monitoring App </title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home Monitoring App </title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/master.css">
-    <script type="text/javascript">
-      function updataSetTemp(value){
-        console.log(value);
-        $("#setTemperature").html(value);
-      }
-    </script>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="container">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+
+  <link rel="stylesheet" href="css/master.css">
+  <script type="text/javascript">
+  function updataSetTemp(value){
+    console.log(value);
+    $("#setTemperature").html(value);
+  }
+  </script>
+
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Temperature Control</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="sass.html">Sass</a></li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">JavaScript</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <h2>Current Temperature</h4>
+        <h4>15</h4>
+        <hr>
+      </div>
       <div class="row">
-        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-          <div class="row">
-          <h1>Temperature Control</h1>
-          <h2>Outside Temperature</h2>
-          </div>
-        <div class="row">
-
-          <h2>Set Temperature</h2>
+        <div class="col s12 m6 l6">
+          <h3>Outside Temperature</h3>
+        </div>
+        <div class="col s12 m6 l6">
+          <h3>Set Temperature</h3>
           <h4 id="setTemperature">20</h4>
           <input type="range" name="temp" min="10" max="40" value="20" oninput="updataSetTemp(value)">
-        </div>
+          <br><br>
           <div class="row">
-          <h2>Current Temperature</h4>
-          <h4>15</h4>
+          <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+          </button>
           </div>
-
-
         </div>
       </div>
+
+
     </div>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  </body>
+  </div>
+</div>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</body>
 </html>
