@@ -2,9 +2,6 @@
 var thermostat = require('socket.io-client')("localhost:3000/furnace");
 
 
-
-
-
 var furnaceIsOn = false;
 
 thermostat.on("run",function()

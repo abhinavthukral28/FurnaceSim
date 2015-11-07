@@ -2,14 +2,20 @@
 
 
 
-var http = require('http');
+var http = require('https');
 var path = require('path');
+var fs = require("fs");
 var socketio = require('socket.io');
 var express = require('express');
 var WeatherService = require("./utils/WeatherService.js");
 
+var options = {
+    key: fs.readFileSync('ssl/serverkey.pem'),
+    cert: fs.readFileSync('ssl/servercert.crt')
+};
+
 var router = express();
-var server = http.createServer(router);
+var server = http.createServer(options,router);
 var io = socketio.listen(server);
 weatherService = new WeatherService();
 
@@ -48,6 +54,8 @@ weatherService.on("weatherUpdate",function(data){
 
 
 io.of("/furnace").on("connection",function(socket){
+
+    console.log("GOT A FURNACE!");
     if (furnaceStatus == undefined) {
         socket.on("running", function () {
             furnaceStatus = true;
