@@ -44,7 +44,7 @@ Class.prototype.getWeather = function (city){
     var options = {
         host: 'api.openweathermap.org',
         path: '/data/2.5/weather?q=' + city +
-        '&appid='+appID
+        '&appid='+appID +'&units=metric'
     };
     http.request(options, function(weatherResponse){
         var weather = parseWeather(weatherResponse,function callback(weather)
