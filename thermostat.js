@@ -31,17 +31,14 @@ var serviceCache;
 
 var furnaceStatus = undefined;
 
-var sockets = [];
-
-//the objective temperature
-//current temperature internal
-
+var socketCount = 0;
 
 
 var furnaceNSP = io.of("/furnace");
 furnaceNSP.on("connection",function(socket){
 
-  console.log("GOT A FURNACE!");
+
+
   if (furnaceStatus == undefined) {
     socket.on("running", function () {
       furnaceStatus = true;
@@ -80,16 +77,16 @@ weatherService.on("weatherUpdate",function(data){
 weatherService.start();
 startTempSim();
 
-io.on('connection', function (socket) {
+io.of("/client").on('connection', function (socket) {
 
-
-  socket.admin = !(sockets.length > 0);
+  socketCount++;
+  socket.admin = (socketCount == 1);
 
   initSocket(socket);
-  sockets.push(socket);
+
 
   socket.on('disconnect', function () {
-    sockets.splice(sockets.indexOf(socket), 1);
+    socketCount--;
   });
 
 
@@ -117,7 +114,7 @@ function initSocket(socket) {
   socket.emit("internalTemperature", internalTemperature);
   socket.emit("desiredTemperature", desiredTemperature);
   socket.emit("furnaceStatus",furnaceStatus == undefined ? "none" : furnaceStatus);
-  console.log(desiredTemperature);
+
 
 }
 server.listen(3000, function () {
@@ -133,7 +130,8 @@ function startTempSim()
     else internalTemperature--;
 
 
-    io.emit("internalTemperature", internalTemperature);
+    io.of("/client").emit("internalTemperature", internalTemperature);
+
     if(internalTemperature < desiredTemperature - hysteresis ) {
       furnaceNSP.emit("run");
     }
