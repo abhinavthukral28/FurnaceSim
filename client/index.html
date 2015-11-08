@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Home Monitoring App </title>
 
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
 
@@ -29,14 +31,14 @@
   <div class="container">
       <div class="row">
         <div class="col s12 m5 l5 card-panel">
-          <h3>Outside Temperature</h3>
+          <h5>Outside Temperature</h5>
         </div>
         <div class="col s12 m5 l5 offset-m2 offset-l2 card-panel">
           <h5>Set Temperature</h5>
           <h4 id="setTemperature">20</h4>
           <input class="blue" type="range" name="temp" min="10" max="40" value="20" oninput="updataSetTemp(value)">
           <div class="row">
-          <button class="btn waves-effect waves-light blue" type="submit" name="action">Submit
+          <button class="waves-effect waves-light blue btn " type="submit" name="action">Submit
           </button>
           </div>
         </div>
@@ -46,7 +48,5 @@
     </div>
   </div>
 </div>
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </body>
 </html>
