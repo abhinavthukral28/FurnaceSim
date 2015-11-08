@@ -96,7 +96,7 @@ io.of("/client").on('connection', function (socket) {
   socket.on("setFurnaceTemp",function(temp)
   {
     if(socket.admin){
-      desiredTemperature = temp;
+      desiredTemperature = parseInt(temp);
       console.log(desiredTemperature);
       socket.broadcast.emit("updateSetTemp",temp);
     }
