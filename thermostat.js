@@ -14,6 +14,7 @@ var WeatherService = require("./utils/WeatherService.js");
 
 
 
+
 app.use(express.static('client'));
 
 weatherService = new WeatherService();
@@ -37,20 +38,24 @@ var sockets = [];
 
 
 
-io.of("/furnace").on("connection",function(socket){
+var furnaceNSP = io.of("/furnace");
+furnaceNSP.on("connection",function(socket){
 
   console.log("GOT A FURNACE!");
   if (furnaceStatus == undefined) {
     socket.on("running", function () {
       furnaceStatus = true;
+      socket.broadcast.emit("furnaceStatus",true);
     });
 
     socket.on("stopping", function () {
       furnaceStatus = false;
+      socket.broadcast.emit("furnaceStatus",false);
     });
 
     socket.on("disconnect", function () {
       furnaceStatus = undefined;
+      socket.broadcast.emit("furnaceStatus","none");
     });
   }
   else socket.disconnect();
@@ -63,6 +68,8 @@ weatherService.on("weatherUpdate",function(data){
 
   outsideTemperature = json["main"].temp;
 
+
+
   serviceCache = data;
 
   io.emit('weatherUpdate', data);
@@ -71,6 +78,7 @@ weatherService.on("weatherUpdate",function(data){
 });
 
 weatherService.start();
+startTempSim();
 
 io.on('connection', function (socket) {
 
@@ -116,19 +124,33 @@ server.listen(3000, function () {
   console.log("Server listening on port 3000");
 });
 
+function startTempSim()
+{
+
+
+  setTimeout( function again(){
+    if(furnaceStatus) internalTemperature++;
+    else internalTemperature--;
+
+
+    io.emit("internalTemperature", internalTemperature);
+    if(internalTemperature < desiredTemperature - hysteresis ) {
+      furnaceNSP.emit("run");
+    }
+    else if(internalTemperature  > desiredTemperature + hysteresis) {
+      furnaceNSP.emit("stop");
+    }
+
+
+    console.log('TEMP: ' + internalTemperature);
+
+    setTimeout(again, 1000); //recursively restart timeout
+
+  }, 1000);
+
+}
 
 
 
 
 
-
-
-//Class.prototype.temp = function(temp) {
-//    if(temp < desiredTemperature - hysteresis ) {
-//        this.emit("run");
-//    }
-//    else if(temp > desiredTemperature + hysteresis) {
-//        this.emit("stop");
-//    }
-//};
-//
