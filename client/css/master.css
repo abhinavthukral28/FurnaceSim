@@ -7,8 +7,8 @@ h1{
 .intro
 {
 	text-align: center;
-	padding-top: 13%;
-	padding-bottom: 13%;
+	padding-top: 13vh;
+	padding-bottom: 13vh;
 	margin-bottom: 50px;
 }
 
@@ -23,4 +23,7 @@ h1{
 	padding: 10px;
 	color: white;
 	display: inline-block;
+}
+input{
+  color: blue;
 }

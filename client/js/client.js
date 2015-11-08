@@ -20,13 +20,15 @@ socket.on('internalTemperature', function (data) {
 })
 socket.on('desiredTemperature', function (data) {
   $("#setTemperature").html(data);
-  console.log(data);
+  console.log("THis is thte data " + data);
   $("#tempSlider").val(data);
 })
 socket.on('updateSetTemp', function (data) {
   $("#setTemperature").html(data);
   console.log(data);
   $("#tempSlider").val(data);
+  Materialize.toast('Set Temperature Updated by Admin', 4000);
+
 })
 
 function updataSetTemp(value){
@@ -37,4 +39,5 @@ function updataSetTemp(value){
 function setNewTemperature() {
   console.log("got here");
   socket.emit('setFurnaceTemp', newTemp);
+  Materialize.toast('New Furance Temperature Set', 4000);
 }

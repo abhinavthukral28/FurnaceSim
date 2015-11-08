@@ -106,6 +106,8 @@ function initSocket(socket) {
   socket.emit("weatherUpdate",serviceCache);
   socket.emit("internalTemperature",internalTemperature);
   socket.emit("desiredTemperature",desiredTemperature);
+  console.log(desiredTemperature);
+
   // socket.emit("furnaceStatus",)
 }
 server.listen(3000, function () {
