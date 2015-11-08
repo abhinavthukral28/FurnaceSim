@@ -8,7 +8,7 @@ var options = {
   key: fs.readFileSync('ssl/serverkey.pem'),
   cert: fs.readFileSync('ssl/servercert.crt')
 };
-var server = https.createServer(options, app)
+var server = https.createServer(options, app);
 var io = require('socket.io')(server);
 var WeatherService = require("./utils/WeatherService.js");
 
@@ -36,20 +36,6 @@ var sockets = [];
 //current temperature internal
 
 
-weatherService.on("weatherUpdate",function(data){
-
-  var json = JSON.parse(data);
-
-  outsideTemperature = json["main"].temp;
-
-  serviceCache = data;
-
-  io.emit('weatherUpdate', data);
-
-
-});
-
-
 
 io.of("/furnace").on("connection",function(socket){
 
@@ -70,6 +56,22 @@ io.of("/furnace").on("connection",function(socket){
   else socket.disconnect();
 });
 
+
+weatherService.on("weatherUpdate",function(data){
+
+  var json = JSON.parse(data);
+
+  outsideTemperature = json["main"].temp;
+
+  serviceCache = data;
+
+  io.emit('weatherUpdate', data);
+
+
+});
+
+weatherService.start();
+
 io.on('connection', function (socket) {
 
 
@@ -88,7 +90,7 @@ io.on('connection', function (socket) {
 
   socket.on("setFurnaceTemp",function(temp)
   {
-    if(socket.admin === true){
+    if(socket.admin){
       desiredTemperature = temp;
       console.log(desiredTemperature);
       socket.broadcast.emit("updateSetTemp",temp);
@@ -102,17 +104,17 @@ io.on('connection', function (socket) {
 
 
 function initSocket(socket) {
-  socket.emit("adminStatus",socket.admin);
-  socket.emit("weatherUpdate",serviceCache);
-  socket.emit("internalTemperature",internalTemperature);
-  socket.emit("desiredTemperature",desiredTemperature);
+  socket.emit("adminStatus", socket.admin);
+  socket.emit("weatherUpdate", serviceCache);
+  socket.emit("internalTemperature", internalTemperature);
+  socket.emit("desiredTemperature", desiredTemperature);
+  socket.emit("furnaceStatus",furnaceStatus == undefined ? "none" : furnaceStatus);
   console.log(desiredTemperature);
 
-  // socket.emit("furnaceStatus",)
 }
 server.listen(3000, function () {
   console.log("Server listening on port 3000");
-})
+});
 
 
 

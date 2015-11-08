@@ -52,10 +52,8 @@ weatherService.on("weatherUpdate",function(data){
 });
 
 
-
 io.of("/furnace").on("connection",function(socket){
 
-    console.log("GOT A FURNACE!");
     if (furnaceStatus == undefined) {
         socket.on("running", function () {
             furnaceStatus = true;
@@ -68,8 +66,12 @@ io.of("/furnace").on("connection",function(socket){
         socket.on("disconnect", function () {
             furnaceStatus = undefined;
         });
+
+        manageTemperature();
     }
     else socket.disconnect();
+
+
 });
 
 io.on('connection', function (socket) {
