@@ -114,8 +114,6 @@ function initSocket(socket) {
   socket.emit("internalTemperature", internalTemperature);
   socket.emit("desiredTemperature", desiredTemperature);
   socket.emit("furnaceStatus",furnaceStatus == undefined ? "none" : furnaceStatus);
-
-
 }
 server.listen(3000, function () {
   console.log("Server listening on port 3000");
