@@ -4,6 +4,12 @@ body{
 h1{
 
 }
+[data-icon]:before {
+	font-family: 'MeteoconsRegular';
+	content: attr(data-icon);
+  font-size: 5rem;
+}
+
 .intro
 {
 	text-align: center;
@@ -26,4 +32,7 @@ h1{
 }
 input{
   color: blue;
+}
+.weatherIcon{
+  font-family: 'MeteoconsRegular';
 }
