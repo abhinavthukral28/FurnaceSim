@@ -1,35 +1,25 @@
 
 
 
-var https = require('https');
-var express = require("express");
-var app = express();
-var router = express.Router();
-var fs = require('fs');
-var path = __dirname + '/client/';
+
+var http = require('https');
+var path = require('path');
+var fs = require("fs");
+var socketio = require('socket.io');
+var express = require('express');
+var WeatherService = require("./utils/WeatherService.js");
+
 var options = {
     key: fs.readFileSync('ssl/serverkey.pem'),
     cert: fs.readFileSync('ssl/servercert.crt')
 };
-var server = https.createServer(options, app)
-var io = require('socket.io')(server);
 
-var WeatherService = require("./utils/WeatherService.js");
-
-
-app.use(express.static('client'));
-
-// router.get("/", function (req,res) {
-//   res.sendFile(path + "index.html")
-// })
-// app.use("/",router);
-//
-// app.use("*",function(req,res){
-//   res.sendFile(path + "index.html");
-// });
-
+var router = express();
+var server = http.createServer(options,router);
+var io = socketio.listen(server);
 weatherService = new WeatherService();
 
+router.use(express.static(path.resolve(__dirname, 'client')));
 
 var hysteresis = 2.5; //thermostat hysteresis
 var desiredTemperature = 20; //desired room temperature
@@ -129,9 +119,13 @@ function initSocket(socket) {
     socket.emit("desiredTemperature",desiredTemperature);
     // socket.emit("furnaceStatus",)
 }
-server.listen(3000, function () {
-  console.log("Server listening on port 3000");
-})
+
+
+server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+  var addr = server.address();
+  console.log("server listening at", addr.address + ":" + addr.port);
+});
+
 
 
 

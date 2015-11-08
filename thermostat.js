@@ -1,25 +1,23 @@
-
-
-
-
-var http = require('https');
-var path = require('path');
-var fs = require("fs");
-var socketio = require('socket.io');
-var express = require('express');
+var https = require('https');
+var express = require("express");
+var app = express();
+var router = express.Router();
+var fs = require('fs');
+var path = __dirname + '/client/';
+var options = {
+  key: fs.readFileSync('ssl/serverkey.pem'),
+  cert: fs.readFileSync('ssl/servercert.crt')
+};
+var server = https.createServer(options, app)
+var io = require('socket.io')(server);
 var WeatherService = require("./utils/WeatherService.js");
 
-var options = {
-    key: fs.readFileSync('ssl/serverkey.pem'),
-    cert: fs.readFileSync('ssl/servercert.crt')
-};
 
-var router = express();
-var server = http.createServer(options,router);
-var io = socketio.listen(server);
+
+app.use(express.static('client'));
+
 weatherService = new WeatherService();
 
-router.use(express.static(path.resolve(__dirname, 'client')));
 
 var hysteresis = 2.5; //thermostat hysteresis
 var desiredTemperature = 20; //desired room temperature
@@ -40,13 +38,13 @@ var sockets = [];
 
 weatherService.on("weatherUpdate",function(data){
 
-    var json = JSON.parse(data);
+  var json = JSON.parse(data);
 
-    outsideTemperature = json["main"].temp;
+  outsideTemperature = json["main"].temp;
 
-    serviceCache = data;
+  serviceCache = data;
 
-   broadcast(data);
+  io.emit('weatherUpdate', data);
 
 
 });
@@ -55,77 +53,64 @@ weatherService.on("weatherUpdate",function(data){
 
 io.of("/furnace").on("connection",function(socket){
 
-    console.log("GOT A FURNACE!");
-    if (furnaceStatus == undefined) {
-        socket.on("running", function () {
-            furnaceStatus = true;
-        });
+  console.log("GOT A FURNACE!");
+  if (furnaceStatus == undefined) {
+    socket.on("running", function () {
+      furnaceStatus = true;
+    });
 
-        socket.on("stopping", function () {
-            furnaceStatus = false;
-        });
+    socket.on("stopping", function () {
+      furnaceStatus = false;
+    });
 
-        socket.on("disconnect", function () {
-            furnaceStatus = undefined;
-        });
-    }
-    else socket.disconnect();
+    socket.on("disconnect", function () {
+      furnaceStatus = undefined;
+    });
+  }
+  else socket.disconnect();
 });
 
 io.on('connection', function (socket) {
 
 
-    socket.admin = !(sockets.length > 0);
+  socket.admin = !(sockets.length > 0);
 
-    initSocket(socket);
-    sockets.push(socket);
+  initSocket(socket);
+  sockets.push(socket);
 
-    socket.on('disconnect', function () {
-      sockets.splice(sockets.indexOf(socket), 1);
-    });
-
-
+  socket.on('disconnect', function () {
+    sockets.splice(sockets.indexOf(socket), 1);
+  });
 
 
 
-    socket.on("setFurnaceTemp",function(temp)
-    {
-        socket.get(("admin"),function(err,isAdmin)
-            {
-                if (isAdmin)
-                {
-                    desiredTemperature = temp;
-                    broadcast("updateSetTemp",temp);
-                }
-                else socket.emit("notAdmin");
-            });
 
-    });
 
+  socket.on("setFurnaceTemp",function(temp)
+  {
+    if(socket.admin === true){
+      desiredTemperature = temp;
+      console.log(desiredTemperature);
+      socket.broadcast.emit("updateSetTemp",temp);
+    }
 
   });
 
 
-function broadcast(event, data) {
-  sockets.forEach(function (socket) {
-    socket.emit(event, data);
-  });
-}
-
-function initSocket(socket) {
-    socket.emit("adminStatus",socket.admin);
-    socket.emit("weatherUpdate",serviceCache);
-    socket.emit("internalTemperature",internalTemperature);
-    socket.emit("desiredTemperature",desiredTemperature);
-    // socket.emit("furnaceStatus",)
-}
-
-
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
-  var addr = server.address();
-  console.log("server listening at", addr.address + ":" + addr.port);
 });
 
+
+
+function initSocket(socket) {
+  socket.emit("adminStatus",socket.admin);
+  socket.emit("weatherUpdate",serviceCache);
+  socket.emit("internalTemperature",internalTemperature);
+  socket.emit("desiredTemperature",desiredTemperature);
+  // socket.emit("furnaceStatus",)
+}
+server.listen(3000, function () {
+  console.log("Server listening on port 3000");
+})
 
 
 
