@@ -98,8 +98,11 @@ clients.push(socket);
     clients.splice(clients.indexOf(socket), 1);
       if (socket.admin)
       {
-        clients[0].admin = true;
-        clients[0].emit("adminStatus",true);
+        if (clients.length > 0) {
+          clients[0].admin = true;
+          clients[0].emit("adminStatus", true);
+        }
+        else adminConnected = false;
       }
   });
 
