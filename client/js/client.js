@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#adminStuff').hide();
 });
-var socket = io.connect("https://localhost:3000/client");
+var socket = io.connect(window.location.href + "client");
 var isAdmin = false;
 var newTemp = null;
 socket.on('adminStatus', function (data) {
