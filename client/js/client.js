@@ -16,7 +16,7 @@ socket.on('adminStatus', function (data) {
 socket.on('weatherUpdate', function (data) {
   var obj = JSON.parse(data);
   var icon = getWeaterIcon(obj.weather[0].icon);
-  var temp = obj.main.temp;
+  var temp = parseInt(obj.main.temp);
   var city = obj.name;
   var description = obj.weather[0].main;
 
@@ -44,14 +44,14 @@ socket.on('furnaceStatus', function (data) {
   console.log("furnace" + data);
   if(data === true){
     $("#furnaceStatus").html("ON");
-    Materialize.toast('Furance ON', 2000);
+    Materialize.toast('Furnace ON', 2000);
   }
   else if (data === "none") {
     $("#furnaceStatus").html("No Furnace Found");
   }
   else if (data === false) {
     $("#furnaceStatus").html("OFF");
-    Materialize.toast('Furance OFF', 2000);
+    Materialize.toast('Furnace OFF', 2000);
   }
 })
 

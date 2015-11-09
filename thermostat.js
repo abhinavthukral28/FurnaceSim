@@ -31,7 +31,9 @@ var serviceCache;
 
 var furnaceStatus = undefined;
 
-var socketCount = 0;
+
+var clients = [];
+var adminConnected = false;
 
 
 var furnaceNSP = io.of("/furnace");
@@ -40,19 +42,20 @@ furnaceNSP.on("connection",function(socket){
 
 
   if (furnaceStatus == undefined) {
+    furnaceStatus = false;
     socket.on("running", function () {
       furnaceStatus = true;
-      io.emit("furnaceStatus",true);
+      io.of("/client").emit("furnaceStatus",true);
     });
 
     socket.on("stopping", function () {
       furnaceStatus = false;
-      io.emit("furnaceStatus",false);
+      io.of("/client").emit("furnaceStatus",false);
     });
 
     socket.on("disconnect", function () {
       furnaceStatus = undefined;
-      socket.broadcast.emit("furnaceStatus","none");
+      io.of("/client").emit("furnaceStatus","none");
     });
   }
   else socket.disconnect();
@@ -64,7 +67,6 @@ weatherService.on("weatherUpdate",function(data){
   var json = JSON.parse(data);
 
   outsideTemperature = json["main"].temp;
-
 
 
   serviceCache = data;
@@ -79,15 +81,26 @@ startTempSim();
 
 io.of("/client").on('connection', function (socket) {
 
-  socketCount++;
-  console.log(socketCount);
-  socket.admin = (socketCount == 1);
+clients.push(socket);
+
+  if (!adminConnected) {
+    socket.admin = true;
+    adminConnected = true;
+  }
+  else
+    socket.admin = false;
 
   initSocket(socket);
 
 
   socket.on('disconnect', function () {
-    socketCount--;
+
+    clients.splice(clients.indexOf(socket), 1);
+      if (socket.admin)
+      {
+        clients[0].admin = true;
+        clients[0].emit("adminStatus",true);
+      }
   });
 
 
@@ -99,7 +112,7 @@ io.of("/client").on('connection', function (socket) {
     if(socket.admin){
       desiredTemperature = parseInt(temp);
       console.log(desiredTemperature);
-      socket.broadcast.emit("updateSetTemp",temp);
+      io.of("/client").emit("updateSetTemp",temp);
     }
 
   });
@@ -125,17 +138,21 @@ function startTempSim()
 
 
   setTimeout( function again(){
+
+
+
     if(furnaceStatus) internalTemperature++;
-    else internalTemperature--;
+    else if (outsideTemperature < internalTemperature) internalTemperature--;
 
 
     io.of("/client").emit("internalTemperature", internalTemperature);
 
+
     if(internalTemperature < desiredTemperature - hysteresis ) {
-      furnaceNSP.emit("run");
+      furnaceStatus ? "" : furnaceNSP.emit("run");
     }
     else if(internalTemperature  > desiredTemperature + hysteresis) {
-      furnaceNSP.emit("stop");
+      !furnaceStatus ? "" : furnaceNSP.emit("stop");
     }
 
 
