@@ -1,24 +1,30 @@
 Welcome to Furnace Simulator!
+To get started run the following commands:
 
-This is an internet of things project which connects a thermostat to a furnace. 
+node furnace.js
 
-Start the system by using node to start thermostat.js and furnace.js
+Now open another shell and run:
+node thermostat.js
 
-You can then visit the app on localhost:3000.
+This is an internet of things project which connects a thermostat to a furnace.
 
-The page will provide the following information;
+The thermostat acts as a server and connects to the furnace using secure web sockets(wss protocol). (Prof. Nel has permitted us to use secure web sockets(wss) in place of https)
 
+The web client connects to the server using https. The certificates used are available in the ssl folder.
+
+You can then visit the app on https://localhost:3000.
+
+The page will provide the following information:
+
+- If the furnace is on or off
 - Temperature in Ottawa,ON (Outside temperature)
 - The temperature of the building (Current temperature)
-- The set temperature of the thermostat 
+- The set temperature of the thermostat
 
-The page will also let you modify the set temperature if you are the first or only one connected to the application. 
+The page allows only the first connected client to control the temperature. All the clients that connect afterwards can only monitor the system.   
 
+The best way to see the functionality is to open 2 browser clients side by side and see the changes synchronize.
 
 Authors
 - Abhinav Thukral
 - Allan Joshua Luke
-
-
-
-

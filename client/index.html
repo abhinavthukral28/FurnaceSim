@@ -30,7 +30,7 @@
   <div class="container">
     <div class="row">
         <div class="card-panel">
-          <h5 id="furnaceStatus">Furnace Status : ON</h5>
+          <h5>Furnace Status : <span id="furnaceStatus"></span></h5>
 
     </div>
 
@@ -39,9 +39,9 @@
       <div class="col s12 m6 l6">
         <div class="card-panel">
           <h5>Current Temperature</h5>
-          <h4 id="currentTemperature">15</h4>
+          <h4><span id="currentTemperature"></span>&deg;C</h4>
         <h5>Set Temperature</h5>
-        <h4 id="setTemperature">20</h4>
+        <h4><span id="setTemperature"></span>&deg;C</h4>
         <div id="adminStuff">
         <input id="tempSlider" class="blue" type="range" name="temp" min="10" max="40" value="20" oninput="updataSetTemp(value)">
         <div class="row">
@@ -58,11 +58,11 @@
       <div class="col s12 m6 l6">
         <div class="card-panel">
         <h5>Outside Temperature</h5>
-        <h6>Ottawa</h6>
+        <h6 id="city"></h6>
         <br>
-        <div id="weatherIconDisplay"><h4 data-icon="A"></h4></div>
-        <h6 id="weatherDescription">Clear</h6>
-        <h4 id="outsideTemperature">20&deg;C</h4>
+        <div id="weatherIconDisplay"></div>
+        <h6 id="weatherDescription"></h6>
+        <h4><span id="outsideTemperature"></span>&deg;C</h4>
       </div>
       </div>
 

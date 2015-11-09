@@ -42,12 +42,12 @@ furnaceNSP.on("connection",function(socket){
   if (furnaceStatus == undefined) {
     socket.on("running", function () {
       furnaceStatus = true;
-      socket.broadcast.emit("furnaceStatus",true);
+      io.emit("furnaceStatus",true);
     });
 
     socket.on("stopping", function () {
       furnaceStatus = false;
-      socket.broadcast.emit("furnaceStatus",false);
+      io.emit("furnaceStatus",false);
     });
 
     socket.on("disconnect", function () {
@@ -80,6 +80,7 @@ startTempSim();
 io.of("/client").on('connection', function (socket) {
 
   socketCount++;
+  console.log(socketCount);
   socket.admin = (socketCount == 1);
 
   initSocket(socket);
@@ -145,8 +146,3 @@ function startTempSim()
   }, 1000);
 
 }
-
-
-
-
-
