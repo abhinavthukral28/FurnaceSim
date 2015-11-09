@@ -15,7 +15,9 @@ The page will provide the following information;
 The page will also let you modify the set temperature if you are the first or only one connected to the application. 
 
 
-- Authors:  Abhinav Thukral, Allan Joshua Luke
+Authors
+- Abhinav Thukral
+- Allan Joshua Luke
 
 
 
