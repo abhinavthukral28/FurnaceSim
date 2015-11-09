@@ -25,17 +25,21 @@
 </head>
 <body>
   <div class="intro blue z-depth-1">
-    <h1>Current<br>Temperature</h1>
-    <h4 id="currentTemperature">15</h4>
+    <h1>Thermostat Monitor</h1>
   </div>
   <div class="container">
     <div class="row">
-      <div class="col s12 m5 l5 card-panel">
-        <h5>Outside Temperature</h5>
-        <h4 data-icon="A"></h4>
-        <h4 id="outsideTemperature">20</h4>
-      </div>
-      <div class="col s12 m5 l5 offset-m2 offset-l2 card-panel">
+        <div class="card-panel">
+          <h5 id="furnaceStatus">Furnace Status : ON</h5>
+
+    </div>
+
+    </div>
+    <div class="row">
+      <div class="col s12 m6 l6">
+        <div class="card-panel">
+          <h5>Current Temperature</h5>
+          <h4 id="currentTemperature">15</h4>
         <h5>Set Temperature</h5>
         <h4 id="setTemperature">20</h4>
         <div id="adminStuff">
@@ -45,13 +49,25 @@
           </button>
         </div>
         </div>
+        <div  id="notAdmin">
+          <br><br>
+        <em>You need to be Admin to set Teperature</em>
       </div>
-
-    </div>
+        </div>
+      </div>
+      <div class="col s12 m6 l6">
+        <div class="card-panel">
+        <h5>Outside Temperature</h5>
+        <h6>Ottawa</h6>
+        <br>
+        <div id="weatherIconDisplay"><h4 data-icon="A"></h4></div>
+        <h6 id="weatherDescription">Clear</h6>
+        <h4 id="outsideTemperature">20&deg;C</h4>
+      </div>
+      </div>
 
 
   </div>
-</div>
 </div>
 </body>
 </html>
