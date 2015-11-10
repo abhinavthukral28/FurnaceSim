@@ -4,12 +4,13 @@ body{
 h1{
 
 }
+/*Web Font for weather Icons*/
 [data-icon]:after {
 	font-family: 'MeteoconsRegular';
 	content: attr(data-icon);
   font-size: 6rem;
 }
-
+/*CSS for header*/
 .intro
 {
 	text-align: center;

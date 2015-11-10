@@ -19,16 +19,17 @@
   <script src="js/client.js">
 
   </script>
-  <script type="text/javascript">
-  </script>
 
 </head>
 <body>
+  <!-- Header Section -->
   <div class="intro blue z-depth-1">
     <h1>Thermostat Monitor</h1>
   </div>
+  <!-- Main Section -->
   <div class="container">
     <div class="row">
+      <!-- Furnace Section -->
         <div class="card-panel">
           <h5>Furnace Status : <span id="furnaceStatus"></span></h5>
 
@@ -38,23 +39,29 @@
     <div class="row">
       <div class="col s12 m6 l6">
         <div class="card-panel">
+          <!-- Current Temperature at the thermostat's location -->
           <h5>Current Temperature</h5>
           <h4><span id="currentTemperature"></span>&deg;C</h4>
+          <!-- Temperature the termostat is set to -->
         <h5>Set Temperature</h5>
         <h4><span id="setTemperature"></span>&deg;C</h4>
+        <!-- Only the first user to connect gets access to admin features -->
         <div id="adminStuff">
+          <!-- slider to set the temperature -->
         <input id="tempSlider" class="blue" type="range" name="temp" min="10" max="40" value="20" oninput="updataSetTemp(value)">
         <div class="row">
           <button id="adminButton" class="waves-effect waves-light blue btn " onclick="setNewTemperature()" name="action">Submit
           </button>
         </div>
         </div>
+        <!-- if the user is not admin -->
         <div  id="notAdmin">
           <br><br>
         <em>You need to be Admin to set Temperature</em>
       </div>
         </div>
       </div>
+      <!-- Weather conditions outside where the thermostat is located -->
       <div class="col s12 m6 l6">
         <div class="card-panel">
         <h5>Outside Temperature</h5>
